@@ -1,0 +1,22 @@
+body {
+  background-color: black;
+  color: lime;
+  font-family: monospace;
+  margin: 0;
+  padding: 0;
+}
+#terminal {
+  padding: 20px;
+}
+#output {
+  white-space: pre-wrap;
+  margin-bottom: 10px;
+}
+#input {
+  width: 100%;
+  background: black;
+  color: lime;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
