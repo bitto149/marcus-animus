@@ -2,30 +2,55 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Marcus Animus</title>
+  <meta charset="UTF-8">
+  <title>Marcus Interfaccia</title>
   <style>
-    body { margin: 0; background: #000; font-family: sans-serif; color: #fff; }
-    #chat { height: 90vh; overflow-y: auto; padding: 10px; }
-    .msg { margin: 5px; padding: 10px; border-radius: 10px; max-width: 80%; }
-    .user { background: #007aff; align-self: flex-end; }
-    .marcus { background: #333; align-self: flex-start; }
-    #inputArea { display: flex; position: fixed; bottom: 0; width: 100%; }
-    #textInput { flex: 1; padding: 10px; border: none; font-size: 16px; }
-    #sendBtn, #micBtn { background: #28a745; color: #fff; border: none; padding: 10px; }
+    body { background-color: black; color: #00FF00; font-family: monospace; padding: 10px; }
+    #chat { max-height: 80vh; overflow-y: auto; }
+    .msg { margin: 10px 0; }
+    .user { color: cyan; }
+    .marcus { color: lime; }
   </style>
 </head>
-<body>
+<body onload="initMarcus()">
   <div id="chat"></div>
-  <div id="inputArea">
-    <input type="text" id="textInput" placeholder="Scrivi o parla..." />
-    <button id="micBtn">🎤</button>
-    <button id="sendBtn">Invia</button>
-  </div>
-  <script src="marcus-core.js"></script>
-  <script src="speech-recognition.js"></script>
-  <script src="text-to-speech.js"></script>
-  <script src="emotion.js"></script>
+  <input type="text" id="input" placeholder="Scrivi o parla..." onkeydown="if(event.key==='Enter') sendMessage()">
+  <button onclick="sendMessage()">Invia</button>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("input");
+      const msg = input.value;
+      if (!msg) return;
+
+      addMessage('user', msg);
+      input.value = "";
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+      });
+
+      const data = await res.json();
+      addMessage('marcus', data.reply);
+
+      const audio = new Audio(data.audioUrl);
+      audio.play();
+    }
+
+    function addMessage(role, content) {
+      const chat = document.getElementById("chat");
+      const div = document.createElement("div");
+      div.className = "msg " + role;
+      div.textContent = (role === "user" ? "Tu: " : "Marcus: ") + content;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function initMarcus() {
+      addMessage("marcus", "Ciao, sono Marcus. Sono attivo.");
+    }
+  </script>
 </body>
 </html>
