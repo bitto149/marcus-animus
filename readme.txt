@@ -1,2 +1,1 @@
-Questa è la parte 103 del progetto Marcus.
-Modulo in fase iniziale.
+Avvia Marcus eseguendo 'npm install' seguito da 'npm run dev'. Modifica '.env' con la tua OpenAI Key.
