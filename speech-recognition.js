@@ -1,2 +1,1 @@
-// Simulazione riconoscimento vocale
-console.log('Riconoscimento vocale attivo');
+// riconoscimento vocale
